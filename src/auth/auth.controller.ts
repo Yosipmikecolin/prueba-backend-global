@@ -15,11 +15,22 @@ export class AuthController {
     const { token, user } = await this.authService.login(createAuthDto);
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 9 * 60 * 60 * 1000,
     });
 
     return user;
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+
+    return { message: 'Logout exitoso' };
   }
 }
