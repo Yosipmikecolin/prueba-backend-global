@@ -1,4 +1,4 @@
-import { User } from 'src/auth/entities/auth.entity';
+import { User } from 'src/user/entities/auth.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
@@ -9,7 +9,7 @@ export class Program {
   @Column()
   name: string;
 
-  @Column({ nullable: true })
+  @Column()
   description: string;
 
   @Column({ type: 'date' })
