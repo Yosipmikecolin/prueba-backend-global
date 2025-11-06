@@ -4,15 +4,42 @@ import { UpdateAuthDto } from './dto/update-user.dto';
 import { User } from './entities/auth.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Program } from 'src/program/entities/program.entity';
+import { BcryptUtil } from 'src/common/utils/bcrypt.util';
+import { ConflictError } from 'src/common/errors/conflict.error';
+import { NotFoundError } from 'src/common/errors/not-found.error';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+
+    @InjectRepository(Program)
+    private readonly programRepo: Repository<Program>,
   ) {}
 
-  create(createAuthDto: CreateUserDto) {
-    return 'This action adds a new auth';
+  async create(data: CreateUserDto) {
+    const exists = await this.userRepo.findOne({
+      where: { email: data.email },
+    });
+    if (exists) throw new ConflictError('Este correo ya está registrado.');
+
+    const program = await this.programRepo.findOne({
+      where: { id: data.programId },
+    });
+    if (!program) throw new NotFoundError('El programa no existe.');
+
+    const hashedPassword = await BcryptUtil.hash(data.password);
+
+    const user = this.userRepo.create({
+      fullName: data.fullName,
+      email: data.email,
+      password: hashedPassword,
+      role: data.role,
+      program,
+    });
+
+    return this.userRepo.save(user);
   }
 
   findAll() {
