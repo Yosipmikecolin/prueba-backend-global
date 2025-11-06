@@ -1,5 +1,11 @@
 import { Program } from 'src/program/entities/program.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { UserRole } from './user-role.enum';
 
 @Entity()
@@ -23,6 +29,11 @@ export class User {
   })
   role: UserRole;
 
-  @ManyToOne(() => Program, (program) => program.users)
-  program: Program;
+  @ManyToMany(() => Program, (program) => program.users, { eager: true })
+  @JoinTable({
+    name: 'user_programs', // ? Nombre de la tabla pivot
+    joinColumn: { name: 'userId', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'programId', referencedColumnName: 'id' },
+  })
+  programs: Program[];
 }

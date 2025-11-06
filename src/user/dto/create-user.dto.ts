@@ -7,6 +7,7 @@ import {
   IsIn,
   IsUUID,
   IsOptional,
+  IsArray,
 } from 'class-validator';
 import { UserRole } from '../entities/user-role.enum';
 
@@ -33,7 +34,7 @@ export class CreateUserDto {
   })
   role?: UserRole = UserRole.STUDENT;
 
-  @IsNotEmpty({ message: 'El programId no puede estar vacío.' })
-  @IsUUID('4', { message: 'El programId debe ser un UUID válido (versión 4).' })
-  programId: string;
+  @IsArray()
+  @IsUUID('4', { each: true })
+  programIds: string[];
 }

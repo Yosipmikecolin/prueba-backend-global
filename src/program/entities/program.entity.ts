@@ -1,5 +1,5 @@
 import { User } from 'src/user/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Program {
@@ -18,6 +18,6 @@ export class Program {
   @Column({ default: 'active' })
   status: string;
 
-  @OneToMany(() => User, (user) => user.program)
+  @ManyToMany(() => User, (user) => user.programs)
   users: User[];
 }

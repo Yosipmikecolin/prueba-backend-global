@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Program } from 'src/program/entities/program.entity';
 import { BcryptUtil } from 'src/common/utils/bcrypt.util';
 import { ConflictError } from 'src/common/errors/conflict.error';
@@ -23,10 +23,8 @@ export class UserService {
     });
     if (exists) throw new ConflictError('Este correo ya está registrado.');
 
-    const program = await this.programRepo.findOne({
-      where: { id: data.programId },
-    });
-    if (!program) throw new NotFoundError('El programa no existe.');
+    const programs = await this.findByIds(data.programIds);
+    if (!programs) throw new NotFoundError('El programa no existe.');
 
     const hashedPassword = await BcryptUtil.hash(data.password);
 
@@ -35,7 +33,7 @@ export class UserService {
       email: data.email,
       password: hashedPassword,
       role: data.role,
-      program,
+      programs: programs,
     });
 
     return this.userRepo.save(user);
@@ -63,5 +61,13 @@ export class UserService {
 
   async findByEmail(email: string) {
     return this.userRepo.findOne({ where: { email } });
+  }
+
+  async findByIds(ids: string[]): Promise<Program[]> {
+    return await this.programRepo.find({
+      where: {
+        id: In(ids),
+      },
+    });
   }
 }
