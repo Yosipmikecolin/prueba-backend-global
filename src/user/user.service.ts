@@ -43,19 +43,20 @@ export class UserService {
     const take = limit;
     const skip = (page - 1) * take;
 
-    const [items, total] = await this.userRepo.findAndCount({
-      relations: ['program'],
+    const [data, total] = await this.userRepo.findAndCount({
+      relations: ['programs'],
       take,
       skip,
       order: { id: 'DESC' },
     });
 
     return {
-      success: true,
-      total,
-      page,
-      totalPages: Math.ceil(total / take),
-      items,
+      data,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      },
     };
   }
 
