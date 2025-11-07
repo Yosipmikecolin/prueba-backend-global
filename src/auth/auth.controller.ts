@@ -46,6 +46,6 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('me')
   me(@Req() req) {
-    return this.authService.me(req.user.id);
+    return this.authService.me(req.user.sub);
   }
 }
