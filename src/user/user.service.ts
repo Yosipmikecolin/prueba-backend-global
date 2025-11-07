@@ -95,4 +95,21 @@ export class UserService {
       },
     });
   }
+
+  async findUser(userId: string): Promise<User> {
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
+      relations: ['programs'],
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+        programs: { id: true, name: true },
+      },
+    });
+
+    if (!user) throw new NotFoundError('Usuario no encontrado');
+    return user;
+  }
 }

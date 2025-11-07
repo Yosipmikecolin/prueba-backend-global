@@ -1,7 +1,16 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  UseGuards,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { Response } from 'express';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,5 +41,11 @@ export class AuthController {
     });
 
     return { message: 'Logout exitoso' };
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  me(@Req() req) {
+    return this.authService.me(req.user.id);
   }
 }
