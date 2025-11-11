@@ -70,12 +70,9 @@ Para simplificar el montaje de la base de datos local, utilice Docker:
 2.  Crea un archivo llamado **`.env`** en la raíz del proyecto y añade las siguientes variables de entorno:
 
     ```bash
-    DB_HOST=localhost
-    DB_PORT=5433
-    DB_USER=postgres
-    DB_PASS=12345
-    DB_NAME=database_global
+    DATABASE_URL=postgresql://postgres:12345@localhost:5433/database_global
     JWT_SECRET=TE8tnQ8yPD
+    NODE_ENV=development
     ```
 
 3.  **Conecta el _backend_ a la base de datos** ejecutando el siguiente comando:
