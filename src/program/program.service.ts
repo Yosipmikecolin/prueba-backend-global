@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Program } from './entities/program.entity';
 import { Repository } from 'typeorm';
 import { ConflictError } from 'src/common/errors/conflict.error';
+import { NotFoundError } from 'src/common/errors/not-found.error';
 
 @Injectable()
 export class ProgramService {
@@ -45,11 +46,26 @@ export class ProgramService {
     return `This action returns a #${id} program`;
   }
 
-  update(id: number, updateProgramDto: UpdateProgramDto) {
-    return `This action updates a #${id} program`;
+  async update(id: string, updateProgramDto: UpdateProgramDto) {
+    const program = await this.programRepo.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+
+    if (!program) {
+      throw new NotFoundError('Programa no encontrado 🤷‍♂️');
+    }
+
+    Object.assign(program, updateProgramDto);
+
+    return await this.programRepo.save(program);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} program`;
+  async delete(id: string) {
+    const result = await this.programRepo.delete(id);
+    if (result.affected === 0)
+      throw new NotFoundError('Programa no encontrado');
+
+    return { message: 'Programa eliminado correctamente' };
   }
 }

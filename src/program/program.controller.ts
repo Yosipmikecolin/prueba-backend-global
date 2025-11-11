@@ -3,11 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseGuards,
   Query,
+  Put,
 } from '@nestjs/common';
 import { ProgramService } from './program.service';
 import { CreateProgramDto } from './dto/create-program.dto';
@@ -33,17 +33,17 @@ export class ProgramController {
     return this.programService.findAll(Number(page), Number(limit));
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin')
   update(@Param('id') id: string, @Body() updateProgramDto: UpdateProgramDto) {
-    return this.programService.update(+id, updateProgramDto);
+    return this.programService.update(id, updateProgramDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles('admin')
   remove(@Param('id') id: string) {
-    return this.programService.remove(+id);
+    return this.programService.delete(id);
   }
 }

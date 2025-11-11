@@ -12,6 +12,9 @@ export class Program {
   @Column()
   description: string;
 
+  @Column({ default: 'mid' })
+  difficulty: string;
+
   @Column({ type: 'date' })
   startDate: Date;
 

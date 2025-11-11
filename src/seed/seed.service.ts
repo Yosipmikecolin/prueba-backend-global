@@ -28,38 +28,44 @@ export class SeedService {
         description:
           'Aprende a crear aplicaciones web modernas con React, Node.js y MongoDB',
         startDate: new Date(),
-        status: 'easy',
+        status: 'active',
+        difficulty: 'easy',
       },
       {
         name: 'Data Science con Python',
         description:
           'Domina el análisis de datos y machine learning con Python',
         startDate: new Date(),
-        status: 'mid',
+        status: 'active',
+        difficulty: 'mid',
       },
       {
         name: 'Diseño UX/UI',
         description: 'Crea experiencias digitales excepcionales',
         startDate: new Date(),
-        status: 'easy',
+        status: 'active',
+        difficulty: 'easy',
       },
       {
         name: 'Marketing Digital',
         description: 'Estrategias de marketing en la era digital',
         startDate: new Date(),
-        status: 'mid',
+        status: 'active',
+        difficulty: 'mid',
       },
       {
         name: 'DevOps y Cloud Computing',
         description: 'Infraestructura moderna y despliegue continuo',
         startDate: new Date(),
-        status: 'high',
+        status: 'active',
+        difficulty: 'high',
       },
       {
         name: 'Inteligencia Artificial',
         description: 'Fundamentos y aplicaciones de IA moderna',
         startDate: new Date(),
-        status: 'high',
+        status: 'active',
+        difficulty: 'high',
       },
     ]);
     const password = await bcrypt.hash('12345678', 10);
